@@ -6,17 +6,17 @@ import java.util.List;
 public class Player {
     private Room currentRoom;
     private Map map;
-    private int health;
+    private int health = 100;
     private List<Item> inventory;
     private UserInterface ui;
 
     public Player(Map map, UserInterface ui) {
         this.map = map;
         this.currentRoom = map.getCurrentRoom();
-        this.health = 100;
         this.inventory = new ArrayList<>();
         this.ui = ui;
     }
+
 
     public Room getCurrentRoom() {
         return currentRoom;
