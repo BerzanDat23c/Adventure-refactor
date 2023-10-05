@@ -21,12 +21,21 @@ public class Adventure {
             switch (command) {
                 case "exit":
                     ui.displayMessage("Thank you for playing!");
-                    return; // Afslut spillet ved at returnere fra metoden
+                    return;
                 case "help":
-                    ui.displayMessage("Available commands: go [n/e/s/w], look, exit");
+                    ui.displayMessage("Available commands: go [n/e/s/w], look, exit, take, drop, eat");
                     break;
                 case "look":
-                    ui.displayMessage(player.getCurrentRoom().getDescription());
+                    ui.displayRoom(player.getCurrentRoom()); // Her er ændringen
+                    break;
+                case "take":
+                    player.takeItem();
+                    break;
+                case "drop":
+                    player.dropItem();
+                    break;
+                case "eat":
+                    player.eatItem();
                     break;
                 default:
                     if (command.startsWith("go ")) {

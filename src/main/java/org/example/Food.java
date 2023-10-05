@@ -16,4 +16,3 @@ public class Food extends Item {
         player.changeHealth(healthPoints);
     }
 }
-

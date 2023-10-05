@@ -1,8 +1,5 @@
 package org.example;
 
-import org.example.Room;
-import org.example.Food;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +22,6 @@ public class Map {
         Room room8 = new Room("Room 8", "A dark room with three doors to the west, north, and east.");
         Room room9 = new Room("Room 9", "A dark room with two doors to the north and west.");
 
-        // Tilføj Food objekter til rum
         Food apple = new Food("Apple", "A red apple", 10);
         room1.addItem(apple);
 
@@ -41,7 +37,6 @@ public class Map {
         Food energyBar = new Food("EnergyBar", "An energy bar", 25);
         room5.addItem(energyBar);
 
-        // Forbind rummene her
         room1.setSouth(room4);
         room1.setEast(room2);
 

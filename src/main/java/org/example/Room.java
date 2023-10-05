@@ -1,5 +1,8 @@
 package org.example;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Room {
     private String name;
     private String description;
@@ -7,10 +10,12 @@ public class Room {
     private Room east;
     private Room south;
     private Room west;
+    private List<Item> items;
 
     public Room(String name, String description) {
         this.name = name;
         this.description = description;
+        this.items = new ArrayList<>();
     }
 
     public String getName() {
@@ -53,15 +58,31 @@ public class Room {
         this.west = west;
     }
 
-    public void addItem(Food apple) {
-
+    public void addItem(Item item) {
+        items.add(item);
     }
 
-    public Item getItemByName(String foodName) {
+    public Item getItemByName(String itemName) {
+        for (Item item : items) {
+            if (item.getName().equalsIgnoreCase(itemName)) {
+                return item;
+            }
+        }
         return null;
     }
 
-    public void removeItem(Food food) {
+    public void removeItem(Item item) {
+        items.remove(item);
+    }
 
+    public void displayItems() {
+        if (items.isEmpty()) {
+            System.out.println("No items in the room.");
+        } else {
+            for (Item item : items) {
+                System.out.print(item.getName() + " ");
+            }
+            System.out.println();
+        }
     }
 }
