@@ -11,11 +11,13 @@ public class Room {
     private Room south;
     private Room west;
     private List<Item> items;
+    private List<Weapon> weapons;
 
     public Room(String name, String description) {
         this.name = name;
         this.description = description;
         this.items = new ArrayList<>();
+        this.weapons = new ArrayList<>();
     }
 
     public String getName() {
@@ -79,10 +81,38 @@ public class Room {
         if (items.isEmpty()) {
             System.out.println("No items in the room.");
         } else {
+            System.out.println("Items in the room:");
             for (Item item : items) {
-                System.out.print(item.getName() + " ");
+                System.out.println("- " + item.getName());
             }
-            System.out.println();
+        }
+    }
+
+    public void addWeapon(Weapon weapon) {
+        weapons.add(weapon);
+    }
+
+    public Weapon getWeaponByName(String weaponName) {
+        for (Weapon weapon : weapons) {
+            if (weapon.getName().equalsIgnoreCase(weaponName)) {
+                return weapon;
+            }
+        }
+        return null;
+    }
+
+    public void removeWeapon(Weapon weapon) {
+        weapons.remove(weapon);
+    }
+
+    public void displayWeapons() {
+        if (weapons.isEmpty()) {
+            System.out.println("No weapons in the room.");
+        } else {
+            System.out.println("Weapons in the room:");
+            for (Weapon weapon : weapons) {
+                System.out.println("- " + weapon.getName());
+            }
         }
     }
 }

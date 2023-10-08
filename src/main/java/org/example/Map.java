@@ -37,35 +37,20 @@ public class Map {
         Food energyBar = new Food("EnergyBar", "An energy bar", 25);
         room5.addItem(energyBar);
 
-        room1.setSouth(room4);
-        room1.setEast(room2);
+        // Opret våben og tilføj dem til rummene
+        MeleeWeapon knife = new MeleeWeapon("Knife", "A sharp knife", 10);
+        room1.addWeapon(knife);
 
-        room2.setWest(room1);
-        room2.setEast(room3);
+        RangedWeapon pistol = new RangedWeapon("Pistol", "A semi-automatic pistol", 20, 10);
+        room2.addWeapon(pistol);
 
-        room3.setWest(room2);
-        room3.setSouth(room6);
+        MeleeWeapon bat = new MeleeWeapon("BaseballBat", "A baseball bat", 15);
+        room3.addWeapon(bat);
 
-        room4.setNorth(room1);
-        room4.setSouth(room7);
-
-        room5.setSouth(room8);
-
-        room6.setNorth(room3);
-        room6.setSouth(room9);
-
-        room7.setNorth(room4);
-        room7.setEast(room8);
-
-        room8.setWest(room7);
-        room8.setNorth(room5);
-        room8.setEast(room9);
-
-        room9.setWest(room8);
-        room9.setNorth(room6);
+        // Sæt dørforbindelser mellem rummene som tidligere
 
         // Sæt det startende rum
-        currentRoom = room1;  // Sæt det indledende rum som nødvendigt
+        currentRoom = room1;
     }
 
     public Room getCurrentRoom() {

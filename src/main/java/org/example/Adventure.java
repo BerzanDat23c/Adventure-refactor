@@ -37,9 +37,6 @@ public class Adventure {
                 case "eat":
                     player.eatItem();
                     break;
-                case "health":
-                    System.out.println(player.getHealth());
-                    break;
                 default:
                     if (command.startsWith("go ")) {
                         String direction = command.substring(3);

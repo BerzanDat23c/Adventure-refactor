@@ -50,8 +50,10 @@ public class UserInterface {
     void displayRoom(Room currentRoom) {
         displayMessage("You are in " + currentRoom.getName());
         displayMessage(currentRoom.getDescription());
-        displayMessage("Items in the room: ");
+        displayMessage("Items in the room:");
         currentRoom.displayItems();
+        displayMessage("Weapons in the room:");
+        currentRoom.displayWeapons();
     }
 
     private void displayHelp() {
@@ -68,7 +70,17 @@ public class UserInterface {
         System.out.println(message);
     }
 
-    public void displayInventory() {
+    public void displayInventory(Inventory inventory) {
+        displayMessage("Inventory:");
+        for (Item item : inventory.getItems()) {
+            displayMessage("- " + item.getName());
+        }
+        Weapon equippedWeapon = inventory.getEquippedWeapon();
+        if (equippedWeapon != null) {
+            displayMessage("Equipped Weapon: " + equippedWeapon.getName());
+        }
+    }
 
+    public void displayInventory() {
     }
 }

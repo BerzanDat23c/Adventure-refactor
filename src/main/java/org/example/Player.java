@@ -1,22 +1,20 @@
 package org.example;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Player {
     private Room currentRoom;
     private Map map;
     private int health = 100;
-    private List<Item> inventory;
+    private Inventory inventory;
     private UserInterface ui;
 
     public Player(Map map, UserInterface ui) {
         this.map = map;
         this.currentRoom = map.getCurrentRoom();
-        this.inventory = new ArrayList<>();
+        this.inventory = new Inventory();
         this.ui = ui;
     }
-
 
     public Room getCurrentRoom() {
         return currentRoom;
@@ -63,38 +61,6 @@ public class Player {
         return health;
     }
 
-    public void addItemToInventory(Item item) {
-        inventory.add(item);
-    }
-
-    public void removeItemFromInventory(Item item) {
-        inventory.remove(item);
-    }
-
-    public List<Item> getInventory() {
-        return inventory;
-    }
-
-    public Item getItemByName(String itemName) {
-        for (Item item : inventory) {
-            if (item.getName().equalsIgnoreCase(itemName)) {
-                return item;
-            }
-        }
-        return null;
-    }
-
-    public void displayInventory() {
-        ui.displayMessage("Inventory:");
-        for (Item item : inventory) {
-            ui.displayMessage("- " + item.getName());
-        }
-    }
-
-    public void interactWithItem() {
-        // Implementer interaktion med genstande her
-    }
-
     public void takeItem() {
         ui.displayMessage("Enter the name of the item you want to take: ");
         String itemName = ui.getUserChoice("Enter the name of the item you want to take: ");
@@ -102,7 +68,7 @@ public class Player {
         Item item = currentRoom.getItemByName(itemName);
 
         if (item != null) {
-            addItemToInventory(item);
+            inventory.addItem(item);
             currentRoom.removeItem(item);
             ui.displayMessage("You took the " + item.getName() + ".");
         } else {
@@ -114,10 +80,10 @@ public class Player {
         ui.displayInventory();
         ui.displayMessage("Enter the name of the item you want to drop: ");
         String itemName = ui.getUserChoice("Enter the name of the item you want to drop: ");
-        Item playerItem = getItemByName(itemName);
+        Item playerItem = inventory.getItemByName(itemName);
 
         if (playerItem != null) {
-            removeItemFromInventory(playerItem);
+            inventory.removeItem(playerItem);
             getCurrentRoom().addItem(playerItem);
             ui.displayMessage("You dropped the " + playerItem.getName() + ".");
         } else {
@@ -127,17 +93,60 @@ public class Player {
 
     public void eatItem() {
         ui.displayInventory();
-        ui.displayMessage("Enter the name of the item you want to eat: ");
-        String itemName = ui.getUserChoice("Enter the name of the item you want to eat: ");
-        Item item = getItemByName(itemName);
+        ui.displayMessage("Enter the name of the food item you want to eat: ");
+        String itemName = ui.getUserChoice("Enter the name of the food item you want to eat: ");
+        Item item = inventory.getItemByName(itemName);
 
         if (item != null && item instanceof Food) {
             Food food = (Food) item;
             food.eat(this);
-            removeItemFromInventory(food);
+            inventory.removeItem(food);
             ui.displayMessage("You ate the " + food.getName() + ". It had an effect on your health.");
         } else {
             ui.displayMessage("You don't have that food item in your inventory.");
+        }
+    }
+
+    public void equipWeapon() {
+        ui.displayInventory();
+        ui.displayMessage("Enter the name of the weapon you want to equip: ");
+        String weaponName = ui.getUserChoice("Enter the name of the weapon you want to equip: ");
+        Weapon weapon = inventory.getWeaponByName(weaponName);
+
+        if (weapon != null) {
+            inventory.equipWeapon(weapon);
+            ui.displayMessage("You have equipped " + weapon.getName() + ".");
+        } else {
+            ui.displayMessage("You don't have that weapon in your inventory.");
+        }
+    }
+
+    public void unequipWeapon() {
+        Weapon equippedWeapon = inventory.getEquippedWeapon();
+
+        if (equippedWeapon != null) {
+            inventory.unequipWeapon();
+            ui.displayMessage("You have unequipped the weapon.");
+        } else {
+            ui.displayMessage("You don't have any weapon equipped.");
+        }
+    }
+
+    public void attack() {
+        Weapon equippedWeapon = inventory.getEquippedWeapon();
+
+        if (equippedWeapon != null) {
+            // Implementer angreb med det udstyrede våben her
+            ui.displayMessage("You attacked with " + equippedWeapon.getName() + ".");
+        } else {
+            ui.displayMessage("You need to equip a weapon first.");
+        }
+    }
+
+    public void displayInventory() {
+        ui.displayMessage("Inventory:");
+        for (Item item : inventory.getItems()) {
+            ui.displayMessage("- " + item.getName());
         }
     }
 }
