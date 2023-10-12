@@ -1,6 +1,7 @@
 package org.example;
 
 import java.util.Scanner;
+import java.util.List;
 
 public class UserInterface {
     private Scanner scanner;
@@ -52,8 +53,6 @@ public class UserInterface {
         displayMessage(currentRoom.getDescription());
         displayMessage("Items in the room:");
         currentRoom.displayItems();
-        displayMessage("Weapons in the room:");
-        currentRoom.displayWeapons();
     }
 
     private void displayHelp() {
@@ -70,17 +69,13 @@ public class UserInterface {
         System.out.println(message);
     }
 
-    public void displayInventory(Inventory inventory) {
+    public void displayInventory(List<Item> items) {
         displayMessage("Inventory:");
-        for (Item item : inventory.getItems()) {
+        for (Item item : items) {
             displayMessage("- " + item.getName());
         }
-        Weapon equippedWeapon = inventory.getEquippedWeapon();
-        if (equippedWeapon != null) {
-            displayMessage("Equipped Weapon: " + equippedWeapon.getName());
-        }
     }
-
-    public void displayInventory() {
+    public void displayHealth(int health) {
+        System.out.println("Your health: " + health);
     }
 }

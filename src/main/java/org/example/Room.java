@@ -11,13 +11,13 @@ public class Room {
     private Room south;
     private Room west;
     private List<Item> items;
-    private List<Weapon> weapons;
+    private List<Enemy> enemies;  // Tilføj en liste over fjender i rummet
 
     public Room(String name, String description) {
         this.name = name;
         this.description = description;
         this.items = new ArrayList<>();
-        this.weapons = new ArrayList<>();
+        this.enemies = new ArrayList<>();  // Initialiser listen over fjender
     }
 
     public String getName() {
@@ -32,32 +32,32 @@ public class Room {
         return north;
     }
 
-    public void setNorth(Room north) {
-        this.north = north;
+    public void setNorthRoom(Room northRoom) {
+        this.north = northRoom;
     }
 
     public Room getEast() {
         return east;
     }
 
-    public void setEast(Room east) {
-        this.east = east;
+    public void setEastRoom(Room eastRoom) {
+        this.east = eastRoom;
     }
 
     public Room getSouth() {
         return south;
     }
 
-    public void setSouth(Room south) {
-        this.south = south;
+    public void setSouthRoom(Room southRoom) {
+        this.south = southRoom;
     }
 
     public Room getWest() {
         return west;
     }
 
-    public void setWest(Room west) {
-        this.west = west;
+    public void setWestRoom(Room westRoom) {
+        this.west = westRoom;
     }
 
     public void addItem(Item item) {
@@ -88,31 +88,20 @@ public class Room {
         }
     }
 
-    public void addWeapon(Weapon weapon) {
-        weapons.add(weapon);
+    public List<Item> getItems() {
+        return items;
+    }
+    public List<Enemy> getEnemies() {
+        return enemies;
+    }
+    public void addEnemy(Enemy enemy) {
+        enemies.add(enemy);
     }
 
-    public Weapon getWeaponByName(String weaponName) {
-        for (Weapon weapon : weapons) {
-            if (weapon.getName().equalsIgnoreCase(weaponName)) {
-                return weapon;
-            }
-        }
-        return null;
+    public void removeEnemy(Enemy enemy) {
+        enemies.remove(enemy);
     }
 
-    public void removeWeapon(Weapon weapon) {
-        weapons.remove(weapon);
     }
 
-    public void displayWeapons() {
-        if (weapons.isEmpty()) {
-            System.out.println("No weapons in the room.");
-        } else {
-            System.out.println("Weapons in the room:");
-            for (Weapon weapon : weapons) {
-                System.out.println("- " + weapon.getName());
-            }
-        }
-    }
-}
+

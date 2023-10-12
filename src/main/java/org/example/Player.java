@@ -1,7 +1,5 @@
 package org.example;
 
-import java.util.List;
-
 public class Player {
     private Room currentRoom;
     private Map map;
@@ -14,6 +12,19 @@ public class Player {
         this.currentRoom = map.getCurrentRoom();
         this.inventory = new Inventory();
         this.ui = ui;
+
+        // Tilføj genstande til spillerens inventar
+        Food apple = new Food("Apple", "A red apple", 10);
+        Food sandwich = new Food("Sandwich", "A tasty sandwich", 15);
+        Food burger = new Food("Burger", "A delicious burger", 20);
+        Food carrot = new Food("Carrot", "A fresh carrot", 5);
+        Food energyBar = new Food("EnergyBar", "An energy bar", 25);
+
+        inventory.addItem(apple);
+        inventory.addItem(sandwich);
+        inventory.addItem(burger);
+        inventory.addItem(carrot);
+        inventory.addItem(energyBar);
     }
 
     public Room getCurrentRoom() {
@@ -40,20 +51,9 @@ public class Player {
 
         if (newRoom != null) {
             currentRoom = newRoom;
-            ui.displayMessage("You have moved to the " + direction + ".");
+            ui.displayRoom(currentRoom); // Vis det nye rum
         } else {
             ui.displayMessage("You cannot go that way.");
-        }
-    }
-
-    public void changeHealth(int deltaHealth) {
-        health += deltaHealth;
-        if (health > 100) {
-            health = 100;
-        }
-        if (health < 0) {
-            health = 0;
-            ui.displayMessage("You died. Game over!");
         }
     }
 
@@ -61,10 +61,27 @@ public class Player {
         return health;
     }
 
+    private void updateHealthDisplay() {
+        ui.displayMessage("Your health: " + health);
+    }
+
+    public void changeHealth(int deltaHealth) {
+        health += deltaHealth;
+        if (health > 100) {
+            health = 100;
+        }
+        if (health <= 0) {
+            health = 0;
+            ui.displayMessage("You died. Game over!");
+        }
+    }
+
+
+
     public void takeItem() {
+        ui.displayInventory(currentRoom.getItems()); // Vis genstande i det aktuelle rum
         ui.displayMessage("Enter the name of the item you want to take: ");
         String itemName = ui.getUserChoice("Enter the name of the item you want to take: ");
-        Room currentRoom = getCurrentRoom();
         Item item = currentRoom.getItemByName(itemName);
 
         if (item != null) {
@@ -77,14 +94,14 @@ public class Player {
     }
 
     public void dropItem() {
-        ui.displayInventory();
+        ui.displayInventory(inventory.getItems()); // Vis genstande i spillerens inventar
         ui.displayMessage("Enter the name of the item you want to drop: ");
         String itemName = ui.getUserChoice("Enter the name of the item you want to drop: ");
         Item playerItem = inventory.getItemByName(itemName);
 
         if (playerItem != null) {
             inventory.removeItem(playerItem);
-            getCurrentRoom().addItem(playerItem);
+            currentRoom.addItem(playerItem);
             ui.displayMessage("You dropped the " + playerItem.getName() + ".");
         } else {
             ui.displayMessage("You don't have that item in your inventory.");
@@ -92,7 +109,7 @@ public class Player {
     }
 
     public void eatItem() {
-        ui.displayInventory();
+        ui.displayInventory(inventory.getItems()); // Vis genstande i spillerens inventar
         ui.displayMessage("Enter the name of the food item you want to eat: ");
         String itemName = ui.getUserChoice("Enter the name of the food item you want to eat: ");
         Item item = inventory.getItemByName(itemName);
@@ -107,46 +124,33 @@ public class Player {
         }
     }
 
-    public void equipWeapon() {
-        ui.displayInventory();
-        ui.displayMessage("Enter the name of the weapon you want to equip: ");
-        String weaponName = ui.getUserChoice("Enter the name of the weapon you want to equip: ");
-        Weapon weapon = inventory.getWeaponByName(weaponName);
-
-        if (weapon != null) {
-            inventory.equipWeapon(weapon);
-            ui.displayMessage("You have equipped " + weapon.getName() + ".");
-        } else {
-            ui.displayMessage("You don't have that weapon in your inventory.");
-        }
-    }
-
-    public void unequipWeapon() {
-        Weapon equippedWeapon = inventory.getEquippedWeapon();
-
-        if (equippedWeapon != null) {
-            inventory.unequipWeapon();
-            ui.displayMessage("You have unequipped the weapon.");
-        } else {
-            ui.displayMessage("You don't have any weapon equipped.");
-        }
+    public void displayInventory() {
+        ui.displayInventory(inventory.getItems()); // Vis genstande i spillerens inventar
     }
 
     public void attack() {
-        Weapon equippedWeapon = inventory.getEquippedWeapon();
-
-        if (equippedWeapon != null) {
-            // Implementer angreb med det udstyrede våben her
-            ui.displayMessage("You attacked with " + equippedWeapon.getName() + ".");
-        } else {
-            ui.displayMessage("You need to equip a weapon first.");
+        Weapon getEquippedWeapon = inventory.getEquippedWeapon();
+        if (inventory.getEquippedWeapon() == null) {
+            ui.displayMessage("You need to equip a weapon to attack.");
+            return;
         }
-    }
 
-    public void displayInventory() {
-        ui.displayMessage("Inventory:");
-        for (Item item : inventory.getItems()) {
-            ui.displayMessage("- " + item.getName());
+        if (inventory.getEquippedWeapon() instanceof RangedWeapon) {
+            RangedWeapon rangedWeapon = (RangedWeapon) inventory.getEquippedWeapon();
+            if (rangedWeapon.canUse()) {
+                // Implementer logik for ranged weapon attack her
+                ui.displayMessage("You fired your " + rangedWeapon.getName() + ".");
+                rangedWeapon.use();
+            } else {
+                ui.displayMessage("Your " + rangedWeapon.getName() + " is out of ammo.");
+
+                inventory.unequipWeapon();
+            }
+        } else if (inventory.getEquippedWeapon() instanceof MeleeWeapon) {
+            // Implementer logik for melee weapon attack her
+            MeleeWeapon meleeWeapon = (MeleeWeapon) inventory.getEquippedWeapon();
+            ui.displayMessage("You attacked with your " + meleeWeapon.getName() + ".");
         }
-    }
+        }
 }
+

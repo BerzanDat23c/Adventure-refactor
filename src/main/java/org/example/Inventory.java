@@ -5,11 +5,11 @@ import java.util.List;
 
 public class Inventory {
     private List<Item> items;
-    private Weapon equippedWeapon;
+    private Weapon equippedWeapon; // Nyt felt for det aktuelt udstyrede våben
+
 
     public Inventory() {
         items = new ArrayList<>();
-        equippedWeapon = null;
     }
 
     public void addItem(Item item) {
@@ -21,19 +21,7 @@ public class Inventory {
     }
 
     public List<Item> getItems() {
-        return items;
-    }
-
-    public Weapon getEquippedWeapon() {
-        return equippedWeapon;
-    }
-
-    public void equipWeapon(Weapon weapon) {
-        equippedWeapon = weapon;
-    }
-
-    public void unequipWeapon() {
-        equippedWeapon = null;
+        return (List<Item>) items;
     }
 
     public Item getItemByName(String itemName) {
@@ -45,12 +33,15 @@ public class Inventory {
         return null;
     }
 
-    public Weapon getWeaponByName(String weaponName) {
-        for (Item item : items) {
-            if (item instanceof Weapon && item.getName().equalsIgnoreCase(weaponName)) {
-                return (Weapon) item;
-            }
-        }
-        return null;
+    public Weapon getEquippedWeapon() {
+        return equippedWeapon;
+    }
+
+    public void setEquippedWeapon(Weapon weapon) {
+        equippedWeapon = weapon;
+    }
+    public void unequipWeapon() {
+        equippedWeapon = null;
     }
 }
+

@@ -26,16 +26,25 @@ public class Adventure {
                     ui.displayMessage("Available commands: go [n/e/s/w], look, exit, take, drop, eat");
                     break;
                 case "look":
-                    ui.displayRoom(player.getCurrentRoom()); // Her er ændringen
+                    ui.displayRoom(player.getCurrentRoom());
                     break;
                 case "take":
                     player.takeItem();
+                    break;
+                case "attack":
+                    player.attack();
                     break;
                 case "drop":
                     player.dropItem();
                     break;
                 case "eat":
                     player.eatItem();
+                    break;
+                case "health":
+                    ui.displayHealth(100);
+                    break;
+                case "sword":
+                    player.takeItem();
                     break;
                 default:
                     if (command.startsWith("go ")) {
